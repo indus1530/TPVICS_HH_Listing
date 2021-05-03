@@ -143,11 +143,11 @@ public class MainApp extends Application {
     public void onCreate() {
         super.onCreate();
 
-        RootBeer rootBeer = new RootBeer(this);
+        /*RootBeer rootBeer = new RootBeer(this);
         if (rootBeer.isRooted()) {
             android.os.Process.killProcess(android.os.Process.myPid());
             System.exit(1);
-        }
+        }*/
 
         TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/JameelNooriNastaleeq.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
 //        TypefaceUtil.overrideFont(getApplicationContext(), "SERIF", "fonts/MBLateefi.ttf"); // font from assets: "assets/fonts/Roboto-Regular.ttf
