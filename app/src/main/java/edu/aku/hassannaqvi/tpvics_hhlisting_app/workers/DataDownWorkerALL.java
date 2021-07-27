@@ -19,7 +19,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
@@ -31,15 +30,19 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Locale;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 
 import edu.aku.hassannaqvi.tpvics_hhlisting_app.contracts.VersionAppContract;
 import edu.aku.hassannaqvi.tpvics_hhlisting_app.core.MainApp;
+
 import edu.aku.hassannaqvi.tpvics_hhlisting_app.utils.Keys;
 import edu.aku.hassannaqvi.tpvics_hhlisting_app.utils.ServerSecurity;
+import edu.aku.hassannaqvi.tpvics_hhlisting_app.workers.NotificationUtils;
 import timber.log.Timber;
 
 
@@ -49,14 +52,14 @@ public class DataDownWorkerALL extends Worker {
 
     private final int position;
     private final Context mContext;
-    HttpsURLConnection urlConnection;
     private final String uploadTable;
     private final String uploadWhere;
     private final NotificationUtils notify;
+    HttpsURLConnection urlConnection;
 
     public DataDownWorkerALL(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
-        mContext  = context;
+        mContext = context;
         uploadTable = workerParams.getInputData().getString("table");
         position = workerParams.getInputData().getInt("position", -2);
         Timber.tag(TAG).d("DataDownWorkerALL: position %s", position);
@@ -76,6 +79,7 @@ public class DataDownWorkerALL extends Worker {
      * So that we will understand the work is executed
      * */
 
+
     @NonNull
     @Override
     public Result doWork() {
@@ -89,16 +93,35 @@ public class DataDownWorkerALL extends Worker {
         URL url;
         Data data;
         try {
+
             url = new URL(MainApp._HOST_URL + MainApp._SERVER_GET_URL);
+
+
+            HttpsURLConnection.setDefaultHostnameVerifier(new HostnameVerifier() {
+                public boolean verify(String hostname, SSLSession session) {
+                    return true;
+                }
+            });
+/*           */
+
+
             Timber.tag(TAG).d("doWork: Connecting...");
             urlConnection = (HttpsURLConnection) url.openConnection();
             urlConnection.setSSLSocketFactory(buildSslSocketFactory(mContext));
-            urlConnection.setReadTimeout(100000 /* milliseconds */);
-            urlConnection.setConnectTimeout(150000 /* milliseconds */);
+            HostnameVerifier allHostsValid = new HostnameVerifier() {
+                public boolean verify(String hostname, SSLSession session) {
+                    //Logcat.d(hostname + " / " + apiHostname);
+                    Log.d(TAG, "verify: hostname " + hostname);
+                    return true;
+                }
+            };
+            HttpsURLConnection.setDefaultHostnameVerifier(allHostsValid);
+            urlConnection.setReadTimeout(5000 /* milliseconds */);
+            urlConnection.setConnectTimeout(5000 /* milliseconds */);
             urlConnection.setRequestMethod("POST");
             urlConnection.setDoOutput(true);
             urlConnection.setDoInput(true);
-            urlConnection.setRequestProperty("USER_AGENT", "SAMSUNG SM-T295");
+            urlConnection.setRequestProperty("User-Agent", "SAMSUNG SM-T295");
             urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setRequestProperty("charset", "utf-8");
             urlConnection.setUseCaches(false);
@@ -159,6 +182,7 @@ public class DataDownWorkerALL extends Worker {
                             .build();
                     return Result.failure(data);
                 }
+                Timber.d("doWork(EN): %s", result.toString());
                 Timber.d("doWork(EN): %s", result.toString());
             } else {
                 Timber.d("Connection Response (Server Failure): %s", urlConnection.getResponseCode());

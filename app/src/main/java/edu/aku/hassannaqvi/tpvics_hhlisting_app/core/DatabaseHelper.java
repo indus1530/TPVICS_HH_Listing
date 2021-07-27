@@ -5,8 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
+import net.sqlcipher.database.SQLiteDatabase;
+import net.sqlcipher.database.SQLiteOpenHelper;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -44,6 +44,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     // The name of database.
     public static final String DATABASE_NAME = "tpvics-hhl.db";
+    public static final String DATABASE_PASSWORD = "asSa%s|n'$ crEed";
     public static final String PROJECT_NAME = "tpvics-hhl-2019";
     public static final String DB_NAME = DATABASE_NAME.replace(".db", "-copy.db");
     public static final String FOLDER_NAME = "DMU-TPVICS_HHL";
@@ -181,7 +182,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public int getListingCount() {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
         Cursor cursor = db.rawQuery(SQL_COUNT_LISTINGS, null);
         int count = 0;
 
@@ -194,7 +195,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public boolean Login(String username, String password) throws SQLException {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
 
         Cursor mCursor = db.rawQuery("SELECT * FROM " + UsersContract.UsersTable.TABLE_NAME + " WHERE " + UsersContract.UsersTable.ROW_USERNAME + "=? AND " + UsersContract.UsersTable.ROW_PASSWORD + "=?", new String[]{username, password});
         if (mCursor != null) {
@@ -214,7 +215,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Long addSignUpForm(SignupContract fc) {
 
         // Gets the data repository in write mode
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASSWORD);
 
 // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
@@ -238,7 +239,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public Long addForm(ListingContract lc) {
 
         // Gets the data repository in write mode
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASSWORD);
 
 // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
@@ -301,7 +302,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void addBLRandom(ListingContract lc) {
 
         // Gets the data repository in write mode
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASSWORD);
 
 // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
@@ -324,7 +325,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateListingUID() {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
 
 // New value for one column
         ContentValues values = new ContentValues();
@@ -342,7 +343,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateListingRecord(String Clustercode) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
 
 // New value for one column
         ContentValues values = new ContentValues();
@@ -360,7 +361,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public JSONArray getAllListingsJSON() {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
         Cursor c = null;
         String[] columns = {
                 ListingEntry._ID,
@@ -445,7 +446,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Collection<ListingContract> getUnsyncedListings() {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
         Cursor c = null;
         String[] columns = null;
 
@@ -484,7 +485,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public JSONArray getUnsyncedListing() {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
         Cursor c = null;
         String[] columns = null;
 
@@ -525,7 +526,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void syncListingFromDevice(JSONArray fmlist) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASSWORD);
         try {
             JSONArray jsonArray = fmlist;
             for (int i = 0; i < jsonArray.length(); i++) {
@@ -547,7 +548,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Collection<SignupContract> getUnsyncedSignups() {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
         Cursor c = null;
         String[] columns = {
                 SignUpTable._ID,
@@ -592,7 +593,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Collection<ListingContract> getAllListingsForRandom() {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
         Cursor c = null;
         String[] columns = {
                 ListingEntry._ID,
@@ -677,7 +678,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public JSONArray getListingsByCluster(String cluster) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
         Cursor c = null;
         String[] columns = {
                 ListingEntry._ID,
@@ -767,7 +768,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public ArrayList<ListingContract> randomLisiting(String clusterCode) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
         Cursor c = null;
         String[] columns = {
                 ListingEntry._ID,
@@ -848,7 +849,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Collection<TeamsContract> getAllTeams() {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
         Cursor c = null;
         String[] columns = {
                 SingleTaluka._ID,
@@ -891,7 +892,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<Cursor> getData(String Query) {
         //get writable database
-        SQLiteDatabase sqlDB = this.getWritableDatabase();
+        SQLiteDatabase sqlDB = this.getWritableDatabase(DATABASE_PASSWORD);
         String[] columns = new String[]{"mesage"};
         //an array list of cursor to save two cursors one has results from the query
         //other cursor stores error message if any errors are triggered
@@ -940,7 +941,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public int syncUser(JSONArray userList) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASSWORD);
         db.delete(UsersContract.UsersTable.TABLE_NAME, null, null);
         int insertCount = 0;
         try {
@@ -970,7 +971,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public int syncDistrict(JSONArray distList) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASSWORD);
         db.delete(DistrictContract.DistrictTable.TABLE_NAME, null, null);
         int insertCount = 0;
         try {
@@ -999,7 +1000,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public int syncEnumBlocks(JSONArray enumList) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASSWORD);
         db.delete(EnumBlockContract.EnumBlockTable.TABLE_NAME, null, null);
         int insertCount = 0;
         try {
@@ -1034,7 +1035,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     public Collection<VerticesContract> getVerticesByCluster(String cluster_code) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
         Cursor c = null;
         String[] columns = {
                 SingleVertices._ID,
@@ -1079,7 +1080,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateSyncedlistings(String id) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
 
 // New value for one column
         ContentValues values = new ContentValues();
@@ -1098,7 +1099,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateSyncedSignup(String id) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
 
 // New value for one column
         ContentValues values = new ContentValues();
@@ -1117,12 +1118,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateSyncedBLRandom(String id) {
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
 
     }
 
     public void syncTeams(JSONArray dcList) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASSWORD);
         db.delete(SingleTaluka.TABLE_NAME, null, null);
 
         try {
@@ -1149,7 +1150,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public EnumBlockContract getEnumBlock(String cluster) {
 
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
         Cursor c = null;
         String[] columns = {
                 EnumBlockTable._ID,
@@ -1192,7 +1193,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void syncVertices(JSONArray vcList) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASSWORD);
         db.delete(SingleVertices.TABLE_NAME, null, null);
 
         try {
@@ -1221,7 +1222,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public Integer syncVersionApp(JSONObject VersionList) {
-        SQLiteDatabase db = this.getWritableDatabase();
+        SQLiteDatabase db = this.getWritableDatabase(DATABASE_PASSWORD);
         db.delete(VersionAppContract.VersionAppTable.TABLE_NAME, null, null);
         long count = 0;
         try {
@@ -1248,7 +1249,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public VersionAppContract getVersionApp() {
 
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
         Cursor c = null;
         String[] columns = {
                 VersionAppTable._ID,
@@ -1295,7 +1296,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //Get All EnumBlock
     public List<EnumBlockContract> getEnumBlock() {
 
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
         Cursor c = null;
         String[] columns = {
                 EnumBlockTable._ID,
@@ -1338,7 +1339,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //Get All Districts
     public List<DistrictContract> getDistrictProv() {
 
-        SQLiteDatabase db = this.getReadableDatabase();
+        SQLiteDatabase db = this.getReadableDatabase(DATABASE_PASSWORD);
         Cursor c = null;
         String[] columns = {
                 DistrictTable._ID,
