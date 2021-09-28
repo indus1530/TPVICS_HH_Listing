@@ -75,16 +75,18 @@
 #
 #-keepattributes SourceFile,LineNumberTable
 #
-#-keepclasseswithmembernames class * {
-#    @butterknife.* <fields>;
-#}
+-keepclasseswithmembernames class * {
+    @butterknife.* <fields>;
+}
 #
-#-keepclasseswithmembernames class * {
-#    @butterknife.* <methods>;
-#}
+-keepclasseswithmembernames class * {
+    @butterknife.* <methods>;
+}
 #
 #-keepattributes *Annotation*
 #-keepattributes Exceptions, Signature, InnerClasses
 #-keep class * extends java.util.ListResourceBundle {
 #    protected Object[][] getContents();
 #}
+-keep,includedescriptorclasses class net.sqlcipher.** { *; }
+-keep,includedescriptorclasses interface net.sqlcipher.** { *; }

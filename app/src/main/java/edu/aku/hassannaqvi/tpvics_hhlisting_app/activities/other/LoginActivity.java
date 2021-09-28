@@ -1,27 +1,28 @@
 package edu.aku.hassannaqvi.tpvics_hhlisting_app.activities.other;
 
+import static java.lang.Thread.sleep;
+import static edu.aku.hassannaqvi.tpvics_hhlisting_app.CONSTANTS.LOGIN_SPLASH_FLAG;
+import static edu.aku.hassannaqvi.tpvics_hhlisting_app.repository.SplashRepositoryKt.populatingSpinners;
+import static edu.aku.hassannaqvi.tpvics_hhlisting_app.repository.UtilsKt.dbBackup;
+import static edu.aku.hassannaqvi.tpvics_hhlisting_app.repository.UtilsKt.getPermissionsList;
+
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
-import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.graphics.drawable.AnimatedVectorDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -80,16 +81,10 @@ import kotlin.Pair;
 import kotlin.Unit;
 import kotlin.coroutines.CoroutineContext;
 
-import static edu.aku.hassannaqvi.tpvics_hhlisting_app.CONSTANTS.LOGIN_SPLASH_FLAG;
-import static edu.aku.hassannaqvi.tpvics_hhlisting_app.repository.SplashRepositoryKt.populatingSpinners;
-import static edu.aku.hassannaqvi.tpvics_hhlisting_app.repository.UtilsKt.dbBackup;
-import static edu.aku.hassannaqvi.tpvics_hhlisting_app.repository.UtilsKt.getPermissionsList;
-import static java.lang.Thread.sleep;
-
 /**
  * A login screen that offers login via email/password.
  */
-public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
+public class LoginActivity extends Activity {
 
     /**
      * A dummy authentication store containing known user names and passwords.
@@ -197,11 +192,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         mEmailView = findViewById(R.id.email);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkAndRequestPermissions()) {
-                populateAutoComplete();
+                //populateAutoComplete();
                 loadIMEI();
             }
         } else {
-            populateAutoComplete();
+            //    populateAutoComplete();
             loadIMEI();
         }
 
@@ -362,11 +357,11 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         for (int i = 0; i < permissions.length; i++) {
             switch (permissions[i]) {
-                case Manifest.permission.READ_CONTACTS:
+              /*  case Manifest.permission.READ_CONTACTS:
                     if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
                         populateAutoComplete();
                     }
-                    break;
+                    break;*/
                 case Manifest.permission.GET_ACCOUNTS:
                 case Manifest.permission.WRITE_EXTERNAL_STORAGE:
                 case Manifest.permission.ACCESS_COARSE_LOCATION:
@@ -387,7 +382,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         }
     }
 
-    private void populateAutoComplete() {
+/*    private void populateAutoComplete() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS)
                     != PackageManager.PERMISSION_GRANTED) {
@@ -399,7 +394,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         } else {
             getLoaderManager().initLoader(0, null, this);
         }
-    }
+    }*/
 
 
     /**
@@ -495,7 +490,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
         });
     }
 
-    @Override
+/*    @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(this,
                 // Retrieve data rows for the device user's 'profile' contact.
@@ -526,7 +521,7 @@ public class LoginActivity extends Activity implements LoaderCallbacks<Cursor> {
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
-    }
+    }*/
 
     @OnClick(R.id.showPassword)
     void onShowPasswordClick() {

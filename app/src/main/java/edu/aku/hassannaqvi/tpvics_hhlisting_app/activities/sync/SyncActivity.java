@@ -1,5 +1,8 @@
 package edu.aku.hassannaqvi.tpvics_hhlisting_app.activities.sync;
 
+import static edu.aku.hassannaqvi.tpvics_hhlisting_app.repository.UtilsKt.dbBackup;
+import static edu.aku.hassannaqvi.tpvics_hhlisting_app.utils.AndroidUtilityKt.isNetworkConnected;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -43,9 +46,6 @@ import edu.aku.hassannaqvi.tpvics_hhlisting_app.otherClasses.SyncModel;
 import edu.aku.hassannaqvi.tpvics_hhlisting_app.workers.DataDownWorkerALL;
 import edu.aku.hassannaqvi.tpvics_hhlisting_app.workers.DataUpWorkerALL;
 import timber.log.Timber;
-
-import static edu.aku.hassannaqvi.tpvics_hhlisting_app.repository.UtilsKt.dbBackup;
-import static edu.aku.hassannaqvi.tpvics_hhlisting_app.utils.AndroidUtilityKt.isNetworkConnected;
 
 public class SyncActivity extends AppCompatActivity {
     private static final String TAG = "SyncActivity";
@@ -208,7 +208,7 @@ public class SyncActivity extends AppCompatActivity {
                                 e.printStackTrace();
                                 downloadTables.get(position).setstatus("Process Failed");
                                 downloadTables.get(position).setstatusID(1);
-                                downloadTables.get(position).setmessage(result);
+                                downloadTables.get(position).setmessage(result + " Excep: " + e.getMessage());
                                 syncListAdapter.updatesyncList(downloadTables);
                             }
                         } else {
